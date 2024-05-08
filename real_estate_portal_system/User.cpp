@@ -1,4 +1,5 @@
 #include "User.h"
+#include "Property.h"
 #include<iostream>
 #include<string>
 #include<map>
@@ -65,4 +66,34 @@ bool User::isValidPassword(const string& password)
 		}
 	}
 	return false;
+
+
+}
+void User::submit(const Property& prop) {
+	propertyQueue.push(prop);
+	userProperties.push_back(prop);
+}
+
+void User::getMyProperties() {
+	for (auto prop : userProperties) {
+		prop.Display();
+	}
+}
+
+void User::removeUser(vector<User>& users, string username, string password) {
+	for (auto it = users.begin(); it != users.end(); ++it) {
+		if (it->getUsername() == username && it->getPassword() == password) {
+			users.erase(it);
+			cout << "User '" << username << "' has been removed successfully." << endl;
+			return;
+		}
+	}
+	cout << "User not found or incorrect credentials." << endl;
+}
+
+string User::getPassword() {
+	return email;
+}
+string User::getUsername() {
+	return password;
 }

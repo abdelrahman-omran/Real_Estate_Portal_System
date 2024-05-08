@@ -1,17 +1,30 @@
 #pragma once
 #include<iostream>
-#include<string>
-#include<vector>
 #include<map>
+#include<string>
 using namespace std;
+
 class Property
 {
-public:
-	int id;
+private:
+	map<int, Property> p;
 	string type;
+	string name;
 	string location;
-	Property(int ID, string Type, string Location);
+	string owner;
+	int room_num;
+	double area;
+	double price;
+
+public:
+	Property();
+	Property(string, string, string, string, int, double, double);
+	static void EditProperty(int, map<int, Property> p);
+	static void RemoveProperty(int id, map<int, Property> p);
 	void Display();
-	Property Search(int ID, map<int, Property>p);
+	void search();
+	int getType();
+	~Property();
+
 };
 
