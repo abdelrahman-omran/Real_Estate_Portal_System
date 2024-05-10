@@ -41,7 +41,7 @@ int main() {
 			else if (n == 2) {
 				Admin::login(adm);
 				cout << "Admin functionalities: " << endl;
-				cout << "1- Display users \n3- Display properties\n2- delete property\n4- delete user account";
+				cout << "1- Display users \n2- Display properties\n3- delete property\n4- delete user account";
 				cin >> operation;
 				if (operation == 1)
 				{
@@ -57,7 +57,10 @@ int main() {
 				}
 				else if (operation == 3)
 				{
-
+					int ID;
+					cout << "enter the id of the property you want to remove";
+					cin >> ID;
+					Property::RemoveProperty(ID, p);
 				}
 				else if (operation == 4)
 				{
@@ -174,7 +177,6 @@ int main() {
 						for (auto it : p)
 						{
 							it.second.Display();
-							cout << "--------------------------------" << endl;
 						}
 					}
 					else if (operation == 5)

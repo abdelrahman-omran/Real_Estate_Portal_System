@@ -72,7 +72,7 @@ Property::~Property()
 }
 
 void Property::Display() {
-	cout << "-----------------------------------" << endl;
+	cout << "---------------------------------" << endl;
 	cout << "type: "<< type << endl;
 	cout << "name: " << name << endl;
 	cout << "location: " << location << endl;
@@ -80,7 +80,7 @@ void Property::Display() {
 	cout << "number of rooms: " << room_num << endl;
 	cout << "area: " << area << endl;
 	cout << "price: " << price << endl;
-	cout << "-----------------------------------" << endl;
+	cout << "---------------------------------" << endl;
 }
 void Property::search(int id, string Type, string Location, int Room_num, double Area, double Price, map<int, Property> p)
 {

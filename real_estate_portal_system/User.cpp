@@ -88,10 +88,15 @@ void User::removeUser(vector<User>& users, string username, string password) {
 	}
 	cout << "User not found or incorrect credentials." << endl;
 }
-
+void User::display() {
+	cout << "---------------------------------" << endl;
+	cout << "Email: " << email << endl;;
+	cout << "Username: " << name << endl;
+	cout << "---------------------------------" << endl;
+}
 string User::getPassword() {
-	return email;
+	return password;
 }
 string User::getUsername() {
-	return password;
+	return email;
 }

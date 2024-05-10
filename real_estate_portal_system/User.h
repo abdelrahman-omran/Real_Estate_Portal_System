@@ -22,6 +22,7 @@ public:
 	static bool login();
 	static void removeUser(vector<User>& users, string username, string password);
 	void getMyProperties();
+	void display();
 	string getPassword();
 	string getUsername();
 
