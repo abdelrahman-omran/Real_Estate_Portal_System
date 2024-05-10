@@ -19,10 +19,11 @@ private:
 public:
 	Property();
 	Property(string, string, string, string, int, double, double);
-	static void EditProperty(int, map<int, Property> p);
-	static void RemoveProperty(int id, map<int, Property> p);
+	static void EditProperty(int, map<int, Property>& p);
+	static void RemoveProperty(int id, map<int, Property>& p);
 	void Display();
 	void search();
+	static void search(int, string, string, int, double, double, map<int, Property> p);
 	int getType();
 	~Property();
 

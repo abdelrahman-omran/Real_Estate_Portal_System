@@ -25,7 +25,7 @@ int main() {
 		cout << "***** welcome *****" << endl;
 		cout << "Who are you? \n1- Admin   2- User  3- Exit" << endl;
 		cin >> inputPerson;
-		while (inputPerson == 1) {
+		while(inputPerson == 1) {
 			cout << "press 1 to register" << " " << "press 2 to login" << " " << "press 3 to exit" << endl;
 			cin >> n;
 			if (n == 1) {
@@ -49,9 +49,9 @@ int main() {
 				}
 				else if (operation == 2)
 				{
-					for (auto it : properties)
+					for (auto it : p)
 					{
-						it.Display();
+						it.second.Display();
 						cout << "--------------------------------" << endl;
 					}
 				}
@@ -99,35 +99,37 @@ int main() {
 				usersAccounts[userEmail] = userPassword;
 				
 			}
-			else if (n == 2) {
-				while (true) {
-					cout << "enter your email" << endl;
-					cin >> userEmail;
-					cout << "enter your password" << endl;
-					cin >> userPassword;
-					auto it = usersAccounts.find(userEmail);
-					if (it != usersAccounts.end())
+			else if (n == 2)
+			{
+				bool access = false;
+				cout << "enter your email" << endl;
+				cin >> userEmail;
+				cout << "enter your password" << endl;
+				cin >> userPassword;
+				auto it = usersAccounts.find(userEmail);
+				if (it != usersAccounts.end())
+				{
+					if (usersAccounts[userEmail] == userPassword)
 					{
-						if (usersAccounts[userEmail] == userPassword)
-						{
-							cout << "welcome" << endl;
-							break;
-						}
-						else
-						{
-							cout << "wrong password" << endl;
-						}
+						cout << "welcome" << endl;
+						access = true;
 					}
 					else
 					{
-						cout << "No such an email" << endl;
+						cout << "wrong password" << endl;
 					}
-
-
 				}
-				while (true) {
+				else
+				{
+					cout << "No such an email" << endl;
+				}
+
+
+				
+				while (access) {
 					cout << "User functionalties: " << endl;
-					cout << "1- submit property \n2- edit property \n3- remove property \n4- display properties \n5- modify account\n6- delete account\n7- Exit";
+					cout << "1- submit property \n2- edit property \n3- remove property \n4- display properties\n5- Search Property\n";
+					cout<< "6- modify account\n7 - delete account\n8 - Exit";
 					cin >> operation;
 					if (operation == 1)
 					{
@@ -165,21 +167,50 @@ int main() {
 						int ID;
 						cout << "enter the id of the property you want to remove";
 						cin >> ID;
-						Property::EditProperty(ID, p);
+						Property::RemoveProperty(ID, p);
 					}
 					else if (operation == 4)
 					{
-						for (auto it : properties)
+						for (auto it : p)
 						{
-							it.Display();
+							it.second.Display();
 							cout << "--------------------------------" << endl;
 						}
 					}
 					else if (operation == 5)
 					{
-
+						int s,id = -1;
+						string type = "-1", location = "-1";
+						int room_num = -1;
+						double area = -1, price = -1;
+						cout << "1- search with ID  | 2- search with features" << endl;
+						cin >> s;
+						if (s == 1)
+						{
+							cin >> id;
+							Property::search(id, type, location, room_num, area, price, p);
+						}
+						else{
+							cout << "Enter the value for each feature (type -1 to skip feature)" << endl;
+							cout << "Enter property type" << endl;;
+							cin >> type;
+							cout << "Enter property location" << endl;;
+							cin >> location;
+							cout << "Enter property number of bedrooms" << endl;;
+							cin >> room_num;
+							cout << "Enter property area" << endl;;
+							cin >> area;
+							cout << "Enter property price" << endl;;
+							cin >> price;
+							Property::search(id, type, location, room_num, area, price, p);
+						}
+												
 					}
 					else if (operation == 6)
+					{
+
+					}
+					else if (operation == 7)
 					{
 						string username, password;
 						cout << "Enter your username" << endl;
@@ -206,7 +237,7 @@ int main() {
 		}
 		if(inputPerson == 3)
 		{
-			cout << "Thanks for using our application";
+			cout << "Thanks for using our application"<<endl;
 			break;
 		}
 

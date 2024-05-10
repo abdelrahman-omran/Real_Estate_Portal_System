@@ -66,8 +66,6 @@ bool User::isValidPassword(const string& password)
 		}
 	}
 	return false;
-
-
 }
 void User::submit(const Property& prop) {
 	propertyQueue.push(prop);
