@@ -19,10 +19,17 @@ public:
 	map<size_t, User>user;
 	queue<Property> propertyQueue;
 	void submit(const Property& prop);
+	static bool login();
+	static void removeUser(vector<User>& users, string username, string password);
+	void getMyProperties();
+	void display();
+	string getPassword();
+	string getUsername();
 
 private:
 	string email, password, name;
 	size_t id = 1000000;
+	vector<Property>userProperties;
 	bool isValidEmail(const string email);
 	bool isValidName(const string name);
 	bool isValidPassword(const string& password);
