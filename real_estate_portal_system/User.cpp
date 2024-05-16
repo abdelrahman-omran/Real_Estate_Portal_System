@@ -31,6 +31,67 @@ User::User(const string userEmail, const string userPassword, const string userN
 		cout << "Error: " << e.what() << endl;
 	}
 }
+User* User::login(map<string, pair<string, User>>& usersAccounts, bool &access)
+{
+		string userEmail, userPassword;
+		cout << "enter your email" << endl;
+		cin >> userEmail;
+		cout << "enter your password" << endl;
+		cin >> userPassword;
+		auto it = usersAccounts.find(userEmail);
+		if (it != usersAccounts.end())
+		{
+			if (it->second.first == userPassword)
+			{
+				access = true;
+				return &(it->second.second);
+			}
+			else
+			{
+				cout << "Invalid Password !\n" << endl;
+			}
+		}
+		else
+		{
+			cout << "No such an email !\n" << endl;
+		}
+		return NULL;
+}
+void User::modifyPassword()
+{
+		string newPassword;
+		cout << "Enter new password please : ";
+		cin >> newPassword;
+		if (User::isValidPassword(newPassword))
+		{
+			User::setPassword(newPassword);
+		}
+		else
+		{
+			cout << "Invalid Password Format !\n";
+			cout << "Please Try Again : ";
+		}
+}
+void User::modifyName()
+{
+		string newName;
+		cout << "Enter new name please : ";
+		cin >> newName;
+		if (User::isValidName(newName))
+		{
+			User::setName(newName);
+		}
+		else
+		{
+			cout << "Invalid Name Format !\n";
+			cout << "Please Try Again : ";
+		}
+}
+
+
+
+
+
 bool User::isValidEmail(const string email)
 {
 	size_t at = email.find('@');
@@ -94,6 +155,24 @@ void User::display() {
 	cout << "Username: " << name << endl;
 	cout << "---------------------------------" << endl;
 }
+
+void User::setEmail(string newEmail)
+{
+	email = newEmail;
+}
+
+void User::setPassword(string newPassword)
+{
+	password = newPassword;
+}
+
+void User::setName(string newName)
+{
+	name = newName;
+}
+
+
+
 string User::getPassword() {
 	return password;
 }
