@@ -3,8 +3,9 @@
 #include<iostream>
 #include<string>
 #include<map>
+#include<queue>
 using namespace std;
-
+int Admin::propertyID = 0;
 Admin::Admin(string Username, string Password) {
 	username = Username;
 	password = Password;
@@ -18,7 +19,7 @@ void Admin::registerUser(map<string, Admin*>& adm) {
 	cin >> p;
 	adm[u] = new Admin(u, p);
 }
-void Admin::login(map<string, Admin*>& adm) {
+bool Admin::login(map<string, Admin*>& adm) {
 	string u;
 	string p;
 	cout << "enter your username:" << " " << endl;
@@ -27,9 +28,11 @@ void Admin::login(map<string, Admin*>& adm) {
 	cin >> p;
 	if (adm[u]->password == p) {
 		cout << "Access granted" << endl;
+		return true;
 	}
 	else {
 		cout << "Access denied" << endl;
+		return false;
 	}
 }
 void Admin::Blacklist(map<string, User>& approvedusers, map<string, User>& Blist)
@@ -46,16 +49,41 @@ void Admin::Blacklist(map<string, User>& approvedusers, map<string, User>& Blist
 		cout << "User " << u << " not found!" << endl;
 	}
 }
-void Admin::approve(map<string, User>& waitinglist, map<string, User>& approvedusers) {
-	string u;
-	cout << "Enter the username of the user you want to approve:" << " " << endl;
-	cin >> u;
-	if (waitinglist.find(u) != waitinglist.end()) {
-		approvedusers[u] = waitinglist[u];
-		waitinglist.erase(u);
-		cout << "User " << u << " has been approved." << endl;
+ void Admin::approve(queue<Property>& propertyQueue, map<int,Property>& p, vector<Property>& properties)
+{
+	if (propertyQueue.empty()) {
+		cout << "No properties left to approve." << endl;
+		return;
 	}
-	else {
-		cout << "User " << u << " not found in the waiting list!" << endl;
+	cout << "You have " << propertyQueue.size() << "properties needed to be approved." << endl;
+
+	while (true) {
+			cout << "First property newly submitted:" << endl;
+			propertyQueue.front().Display();
+			cout << "press 1 to approve, 2 to decline, 3 exit" << endl;
+			int approve;
+			cin >> approve;
+			if (approve == 1) {
+				properties.push_back(propertyQueue.front());
+				p[Admin::propertyID] = propertyQueue.front();
+				Admin::propertyID++;
+				cout << "property added successfully!" << endl;
+				propertyQueue.pop();
+			}
+			else if (approve == 2)
+			{
+				cout << "Property declined!" << endl;
+				propertyQueue.pop();
+
+			}
+			else
+			{
+				return;
+			}
+			if (propertyQueue.empty())
+			{
+				cout << "No properties left to approve." << endl;
+				return;
+			}
 	}
 }

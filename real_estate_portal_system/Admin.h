@@ -2,17 +2,20 @@
 #include<iostream>
 #include<map>
 #include<string>
+#include<queue>
 #include "User.h"
 using namespace std;
 class Admin
 {
 public:
-	string username;
-	string password;
+	static int propertyID;
 	Admin(string Username, string Password);
 	static void registerUser(map<string, Admin*>& adm);
-	static void login(map<string, Admin*>& adm);
+	static bool login(map<string, Admin*>& adm);
 	void Blacklist(map<string, User>& approvedusers, map<string, User>& Blist);
-	void approve(map<string, User>& waitinglist, map<string, User>& approvedusers);
+	static void approve(queue<Property>& propertyQueue, map<int, Property>& p, vector<Property>& properties);
+private:
+	string username;
+	string password;
 };
 

@@ -3,6 +3,8 @@
 #include<iostream>
 #include<string>
 #include<map>
+#include<queue>
+
 using namespace std;
 #define ll long long
 #define st size_t
@@ -128,7 +130,7 @@ bool User::isValidPassword(const string& password)
 	}
 	return false;
 }
-void User::submit(const Property& prop) {
+void User::submit(Property& prop, queue<Property>& propertyQueue) {
 	propertyQueue.push(prop);
 	userProperties.push_back(prop);
 }

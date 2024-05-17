@@ -2,6 +2,7 @@
 #include<string>
 #include<map>
 #include<vector>
+#include<queue>
 #include "Admin.h"
 #include "User.h"
 #include "Property.h"
@@ -17,6 +18,8 @@ int main() {
 	map<string, pair<string,User>>usersAccounts;
 	map<int, Property>p;
 
+	queue<Property> propertyQueue;
+
 	vector<User>users;
 	vector<Property>properties;
 
@@ -29,19 +32,31 @@ int main() {
 			cout << "press 1 to register" << " " << "press 2 to login" << " " << "press 3 to exit" << endl;
 			cin >> n;
 			if (n == 1) {
-
-				Admin::registerUser(adm);
-				cout << "do you want to continue" << endl;
-				string y;
-				cin >> y;
-				if (y == "n" or y == "N") {
-					break;
+				string username, password;
+				cout << "You must be a super admin to register new admins!"<<endl;
+				cout << "Enter super admin username"<<endl;
+				cin >> username;
+				cout << "Enter super admin password"<<endl;
+				cin >> password;
+				if (username != "admin" || password != "admin")
+				{
+					cout << "access denied"<<endl;
+				}
+				else {
+					cout << "access approved" << endl;
+					Admin::registerUser(adm);
+					cout << "do you want to continue" << endl;
+					string y;
+					cin >> y;
+					if (y == "n" or y == "N") {
+						break;
+					}
 				}
 			}
 			else if (n == 2) {
 				Admin::login(adm);
 				cout << "Admin functionalities: " << endl;
-				cout << "1- Display users \n2- Display properties\n3- delete property\n4- delete user account\n";
+				cout << "1- Display users \n2- Display properties \n3- Approve property\n3- Delete property\n4- Delete user account\n";
 				cin >> operation;
 				if (operation == 1)
 				{
@@ -55,8 +70,11 @@ int main() {
 					for (auto it : p)
 					{
 						it.second.Display();
-						cout << "--------------------------------" << endl;
 					}
+				}
+				else if (operation == 3)
+				{
+					Admin::approve(propertyQueue, p, properties);
 				}
 				else if (operation == 3)
 				{
@@ -141,10 +159,7 @@ int main() {
 						cout << "Enter property price" << endl;
 						cin >> price;
 						Property prop(type, name, location, owner, room_num, area, price);
-						user->submit(prop);
-						properties.push_back(prop);
-						p[id] = prop;
-						id++;
+						user->submit(prop,propertyQueue);
 					}
 					else if (operation == 2)
 					{
@@ -250,8 +265,6 @@ int main() {
 						cout << "Invalid operation" << endl;
 					}
 				}
-
-			
 			}
 			else if (n == 3) {
 				break;

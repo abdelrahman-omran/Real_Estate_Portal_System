@@ -3,6 +3,7 @@
 #include <queue>
 #include <string>
 #include <map>
+#include<queue>
 #include <optional>
 #include "Property.h"
 #define ll long long
@@ -19,7 +20,7 @@ public:
 	User(const string userEmail, const string userPassword, const string userName);
 	map<size_t, User>user;
 	queue<Property> propertyQueue;
-	void submit(const Property& prop);
+	void submit(Property& prop, queue<Property>& propertyQueue);
 	static User* login(map<string, pair<string, User>>& usersAccounts, bool &access);
 	void modifyName();
 	void modifyPassword();
