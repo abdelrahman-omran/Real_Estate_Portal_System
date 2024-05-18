@@ -15,6 +15,7 @@ public:
 	map<size_t, User>user;
 	queue<Property> propertyQueue;
 	void submit(Property& prop, queue<Property>& propertyQueue);
+	void AddProperty(Property& prop);
 	static User* login(map<string, pair<string, User>>& usersAccounts, bool &access);
 	void modifyName();
 	void modifyPassword();

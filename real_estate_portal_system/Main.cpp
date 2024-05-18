@@ -10,7 +10,7 @@
 #include "Property.h"
 using namespace std;
 map<string, string> adm;
-map<string, pair<string, User>>usersAccounts;
+map<string, pair<string, User>> usersAccounts;
 map<int, Property>p;
 
 queue<Property> propertyQueue; //FIFO,
@@ -20,20 +20,7 @@ static vector<User>users;
 vector<Property>properties;
 vector<int>propCompareID;
 
-void writeFile() {
-	ofstream File("File_Data.txt", ios::out | ios::app);
-	if (File.is_open()) {
-		for (int i = 0; i < users.size(); i++) {
-			File << users[i].getEmail() << "," << users[i].getPassword() << "," << users[i].getUsername() << endl;
-		}
-		File.close();
-	}
-	else {
-		cout << "Unable to open file to write data!" << endl;
-	}
-}
-
-static vector<string> splitString(const string& s, char del) {
+static vector<string> splitString(string& s, char del) {
 	stringstream ss(s);
 	string word;
 	vector<string> str;
@@ -43,6 +30,32 @@ static vector<string> splitString(const string& s, char del) {
 	return str;
 }
 
+void writeFile() {
+	ofstream File("File_Data.txt", ios::out | ios::trunc);
+	if (File.is_open()) {
+		File << "ADMIN INFO" << endl;
+		for (auto it : adm) {
+			File << it.first << "," << it.second << endl;
+		}
+		File << "USER INFO" << endl;
+		for (auto it : usersAccounts) {
+			File << it.second.second.getEmail() << "," << it.second.second.getPassword() << "," << it.second.second.getUsername() << endl;
+		}
+		File << "PROPERTY INFO" << endl;
+		for (auto it : p) {
+			File << it.first << "," << it.second.getType() << "," << it.second.getName() << "," << it.second.getLocation() << "," << it.second.getOwner() << "," << it.second.getRooms() << "," << it.second.getArea() << "," << it.second.getPrice() << endl;
+		}
+		File << "NEW PROPERTY LISTINGS" << endl;
+		while (!propertyQueue.empty()) {
+			File << propertyQueue.front().getType() << "," << propertyQueue.front().getName() << "," << propertyQueue.front().getLocation() << "," << propertyQueue.front().getOwner() << "," << propertyQueue.front().getRooms() << "," << propertyQueue.front().getArea() << "," << propertyQueue.front().getPrice() << endl;
+			propertyQueue.pop();
+		}
+		File.close();
+	}
+	else {
+		cout << "Unable to open file to write data!" << endl;
+	}
+}
 void readFile() {
 
 	ifstream File("File_Data.txt");
@@ -51,18 +64,67 @@ void readFile() {
 		string line;
 		vector<string>lines;
 		while (getline(File, line)) {
+			if (line == "ADMIN INFO")
+				continue;
+			if (line == "USER INFO")
+				break;
+			lines = splitString(line, ',');
+			email = lines[0];
+			password = lines[1];
+			Admin Admin(email,password);
+			adm[email] = password;
+		}
+		while (getline(File, line)) {
+			if (line == "USER INFO")
+				continue;
+			if (line == "PROPERTY INFO")
+				break;
 			lines = splitString(line, ',');
 			email = lines[0];
 			password = lines[1];
 			name = lines[2];
 			User user(email, password, name);
-			users.push_back(user);
+			usersAccounts[email].first = password;
+			usersAccounts[email].second = user;
 		}
+		while (getline(File, line)) {
+			if (line == "PROPERTY INFO")
+				continue;
+			if (line == "NEW PROPERTY LISTINGS")
+				break;
+			lines = splitString(line, ',');
+			int id = stoi(lines[0]);
+			string type = lines[1] ;
+			string name = lines[2];
+			string location = lines[3];
+			string owner = lines[4];
+			int room_num = stoi(lines[5]);
+			double area = stod(lines[6]);
+			double price = stod(lines[7]);
+			Property prop(type, name, location, owner, room_num, area, price);
+			usersAccounts[owner].second.AddProperty(prop);
+			p[id] = prop;
+			}
+		while (getline(File, line)) {
+			if (line == "NEW PROPERTY LISTINGS")
+				continue;
+			lines = splitString(line, ',');
+			string type = lines[0];
+			string name = lines[1];
+			string location = lines[2];
+			string owner = lines[3];
+			int room_num = stoi(lines[4]);
+			double area = stod(lines[5]);
+			double price = stod(lines[6]);
+			Property prop(type, name, location, owner, room_num, area, price);
+			propertyQueue.push(prop); // check again if they are in the right place.
+			}
 		File.close();
 		return;
 	}
 	else {
 		cout << "Unable to open file to read data!" << endl;
+		return;
 	}
 
 }
@@ -99,7 +161,7 @@ int main() {
 					cin >> username;
 					cout << "Enter admin password" << endl;
 					cin >> password;
-					Admin::Admin(username, password); //O(1)
+					Admin admin(username, password); //O(1)
 					adm[username] = password;
 					cout << "do you want to continue" << endl;
 					string y;
@@ -120,9 +182,9 @@ int main() {
 					cin >> operation;
 					if (operation == 1)
 					{
-						for (auto it : users) // O(N)
+						for (auto it : usersAccounts) // O(N)
 						{
-							it.display();
+							it.second.second.display();
 						}
 					}
 					else if (operation == 2)
@@ -136,7 +198,7 @@ int main() {
 					}
 					else if (operation == 3)
 					{
-						Admin::approve(propertyQueue, p, properties); //O(N)
+						Admin::approve(propertyQueue, usersAccounts, p, properties, p.size()); //O(N)
 					}
 					else if (operation == 4)
 					{
@@ -184,10 +246,10 @@ int main() {
 
 				cout << "Enter your email" << endl;
 				cin >> userEmail;
-				cout << "Enter your name" << endl;
-				cin >> userName;
 				cout << "Enter your password" << endl;
 				cin >> userPassword;
+				cout << "Enter your name" << endl;
+				cin >> userName;
 
 				User user(userEmail, userPassword, userName);
 				users.push_back(user);
@@ -199,7 +261,7 @@ int main() {
 				bool access = false;
 				User* user = User::login(usersAccounts, access);
 				while (access) {
-					cout << "User functionalties: " << endl;
+					cout << "User functionalities: " << endl;
 					cout << "1- submit property \n2- edit property \n3- remove property \n4- display properties\n5- Search Property\n";
 					cout<< "6- Compare properties \n7- modify account\n8 - delete account\n9 - Exit\n";
 					cin >> operation;
