@@ -7,10 +7,12 @@ using namespace std;
 
 Property::Property()
 {
+
 }
 
 Property::Property(string Type, string Name, string Location, string Owner, int Room_num, double Area, double Price)
 {
+
 	type = Type;
 	name = Name;
 	location = Location;
@@ -65,24 +67,18 @@ void Property::RemoveProperty(int id, map<int, Property>& p)
 		cout << "Property " << id << "not exist" << endl;
 	}
 }
-
-Property::~Property()
-{
-
-}
-
 void Property::Display() {
-	cout << "---------------------------------" << endl;
 	cout << "type: "<< type << endl;
 	cout << "name: " << name << endl;
 	cout << "location: " << location << endl;
 	cout << "owner: " << owner << endl;
-	cout << "number of rooms: " << room_num << endl;
+	cout << "number of bedrooms: " << room_num << endl;
 	cout << "area: " << area << endl;
 	cout << "price: " << price << endl;
 	cout << "---------------------------------" << endl;
 }
-void Property::search(int id, string Type, string Location, int Room_num, double Area, double Price, map<int, Property> p)
+#pragma region Search
+void Property::search(int id, string Type, string Location, int Room_num, double Area, double MinPrice, double MaxPrice, map<int, Property> p)
 {
 	if (id != -1)
 	{
@@ -141,11 +137,22 @@ void Property::search(int id, string Type, string Location, int Room_num, double
 				}
 			}
 		}
-		if (Price != -1)
+		if (MinPrice != -1)
 		{
 			for (auto it = p.begin(); it != p.end();) {
-				if (it->second.price != Price) {
+				if (it->second.price < MinPrice) {
 					it = p.erase(it); 
+				}
+				else {
+					it++;
+				}
+			}
+		}
+		if (MaxPrice != -1)
+		{
+			for (auto it = p.begin(); it != p.end();) {
+				if (it->second.price > MaxPrice) {
+					it = p.erase(it);
 				}
 				else {
 					it++;
@@ -165,3 +172,50 @@ void Property::search(int id, string Type, string Location, int Room_num, double
 		}
 	}
 }
+#pragma endregion
+
+#pragma region setters and getters
+string Property::getType() {
+	return type;
+}
+string Property::getName() {
+	return name;
+}
+string Property::getLocation() {
+	return location;
+}
+string Property::getOwner() {
+	return owner;
+}
+int Property::getRooms() {
+	return room_num;
+}
+double Property::getArea() {
+	return area;
+}
+double Property::getPrice() {
+	return price;
+}
+//setters
+void Property::setType(string Type) {
+	type = Type;
+}
+void Property::setName(string Name) {
+	name = Name;
+}
+void Property::setLocation(string Location) {
+	location = Location;
+}
+void Property::setOwner(string Owner) {
+	owner = Owner;
+}
+void Property::setRooms(int Rooms) {
+	room_num = Rooms;
+}
+void Property::setArea(double Area) {
+	area = Area;
+}
+void Property::setPrice(double Price) {
+	price = Price;
+}
+#pragma endregion

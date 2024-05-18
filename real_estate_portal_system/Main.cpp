@@ -18,11 +18,12 @@ int main() {
 	map<string, pair<string,User>>usersAccounts;
 	map<int, Property>p;
 
-	queue<Property> propertyQueue;
+	queue<Property> propertyQueue; //FIFO,
+	//any other data structure, won't work.
 
 	vector<User>users;
 	vector<Property>properties;
-
+	vector<int>propCompareID;
 	while (true) {
 
 		cout << "***** welcome *****" << endl;
@@ -44,7 +45,7 @@ int main() {
 				}
 				else {
 					cout << "access approved" << endl;
-					Admin::registerUser(adm);
+					Admin::registerUser(adm); //O(1)
 					cout << "do you want to continue" << endl;
 					string y;
 					cin >> y;
@@ -54,63 +55,71 @@ int main() {
 				}
 			}
 			else if (n == 2) {
-				Admin::login(adm);
-				cout << "Admin functionalities: " << endl;
-				cout << "1- Display users \n2- Display properties \n3- Approve property\n3- Delete property\n4- Delete user account\n";
-				cin >> operation;
-				if (operation == 1)
+				bool access;
+				access = Admin::login(adm);
+				while (access)
 				{
-					for (auto it : usersAccounts)
+					cout << "Admin functionalities: " << endl;
+					cout << "1- Display users \n2- Display properties \n3- Approve property\n4- Delete property\n5- Delete user account\n";
+					cout << "6- Exit\n";
+					cin >> operation;
+					if (operation == 1)
 					{
-						it.second.second.display();
+						for (auto it : usersAccounts) // O(N)
+						{
+							it.second.second.display();
+						}
 					}
-				}
-				else if (operation == 2)
-				{
-					for (auto it : p)
+					else if (operation == 2)
 					{
-						it.second.Display();
+						for (auto it : p) //O(N)
+						{
+							cout << "---------------------------------" << endl;
+							cout << "ID: " << it.first << endl;
+							it.second.Display(); //O(1)
+						}
+					}
+					else if (operation == 3)
+					{
+						Admin::approve(propertyQueue, p, properties); //O(N)
+					}
+					else if (operation == 4)
+					{
+						int ID;
+						cout << "enter the id of the property you want to remove" << endl;
+						cin >> ID;
+						Property::RemoveProperty(ID, p);
+					}
+					else if (operation == 5)
+					{
+						string username, password;
+						cout << "Enter username" << endl;
+						cin >> username;
+						cout << "Enter password" << endl;
+						cin >> password;
+						int confirm;
+						cout << "Are you sure you want to delete this account?\n type 1 to confirm\n";
+						cin >> confirm;
+						if (confirm == 1) {
+							User::removeUser(users, username, password);
+							usersAccounts.erase(username);
+						}
+					}
+					else if (operation == 6) {
+						break;
+					}
+					else {
+						cout << "Invalid operation" << endl;
 					}
 				}
-				else if (operation == 3)
-				{
-					Admin::approve(propertyQueue, p, properties);
 				}
-				else if (operation == 3)
-				{
-					int ID;
-					cout << "enter the id of the property you want to remove" << endl;
-					cin >> ID;
-					Property::RemoveProperty(ID, p);
-				}
-				else if (operation == 4)
-				{
-					string username, password;
-					cout << "Enter username" << endl;
-					cin >> username;
-					cout << "Enter password" << endl;
-					cin >> password;
-					int confirm;
-					cout << "Are you sure you want to delete this account?\n type 1 to confirm\n";
-					cin >> confirm;
-					if (confirm == 1) {
-						User::removeUser(users, username, password);
-						usersAccounts.erase(username);
-					}
-				}
-				else if (operation == 5) {
+				else if (n == 3) {
 					break;
 				}
 				else {
 					cout << "Invalid operation" << endl;
 				}
-			}
-			else if (n == 3) {
-				break;
-			}
-			else {
-				cout << "Invalid operation" << endl;
-			}
+		
 		}
 		while(inputPerson == 2)
 		{
@@ -137,7 +146,7 @@ int main() {
 				while (access) {
 					cout << "User functionalties: " << endl;
 					cout << "1- submit property \n2- edit property \n3- remove property \n4- display properties\n5- Search Property\n";
-					cout<< "6- modify account\n7 - delete account\n8 - Exit\n";
+					cout<< "6- Compare properties \n7- modify account\n8 - delete account\n9 - Exit\n";
 					cin >> operation;
 					if (operation == 1)
 					{
@@ -150,30 +159,30 @@ int main() {
 						cin >> name;
 						cout << "Enter property location" << endl;
 						cin >> location;
-						cout << "Enter property owner" << endl;
-						cin >> owner;
+						//cout << "Enter property owner" << endl;
+						//cin >> owner;
 						cout << "Enter property number of rooms" << endl;
 						cin >> room_num;
 						cout << "Enter property area" << endl;
 						cin >> area;
 						cout << "Enter property price" << endl;
 						cin >> price;
-						Property prop(type, name, location, owner, room_num, area, price);
-						user->submit(prop,propertyQueue);
+						Property prop(type, name, location, user->getEmail(), room_num, area, price);
+						user->submit(prop, propertyQueue);
 					}
 					else if (operation == 2)
 					{
 						int ID;
 						cout << "enter the id of the property you want to edit"<<endl;
 						cin >> ID;
-						Property::EditProperty(ID, p);
+						Property::EditProperty(ID, p); //O(logN)
 					}
 					else if (operation == 3)
 					{
 						int ID;
 						cout << "enter the id of the property you want to remove"<<endl;
 						cin >> ID;
-						Property::RemoveProperty(ID, p);
+						Property::RemoveProperty(ID, p); //O(logN)
 					}
 					else if (operation == 4)
 					{
@@ -183,6 +192,8 @@ int main() {
 						if (choice == 1) {
 							for (auto it : p)
 							{
+								cout << "---------------------------------" << endl;
+								cout <<"ID: " << it.first << endl;
 								it.second.Display();
 							}
 						}
@@ -200,13 +211,13 @@ int main() {
 						int s,id = -1;
 						string type = "-1", location = "-1";
 						int room_num = -1;
-						double area = -1, price = -1;
+						double area = -1, minPrice = -1, maxPrice;
 						cout << "1- search with ID  | 2- search with features" << endl;
 						cin >> s;
-						if (s == 1)
+						if (s == 1) 
 						{
 							cin >> id;
-							Property::search(id, type, location, room_num, area, price, p);
+							Property::search(id, type, location, room_num, area, minPrice, maxPrice, p); //O(LogN)
 						}
 						else{
 							cout << "Enter the value for each feature (type -1 to skip feature)" << endl;
@@ -218,20 +229,36 @@ int main() {
 							cin >> room_num;
 							cout << "Enter property area" << endl;
 							cin >> area;
-							cout << "Enter property price" << endl;
-							cin >> price;
-							Property::search(id, type, location, room_num, area, price, p);
+							cout << "Enter property minimum price" << endl;
+							cin >> minPrice;
+							cout << "Enter property maximum price" << endl;
+							cin >> maxPrice;
+							Property::search(id, type, location, room_num, area, minPrice, maxPrice, p); //O(N)
 						}
 												
 					}
 					else if (operation == 6)
+					{
+						int num,id;
+						cout << "How many properties you want to compare?" << endl;
+						cin >> num;
+						for (int i = 1; i <= num; i++)
+						{
+							cout << "Enter ID: " << i << endl;
+							cin >> id;
+							propCompareID.push_back(id);
+						}
+						user->compare(propCompareID, p);
+						propCompareID.clear();
+					}
+					else if (operation == 7)
 					{
 						int choice;
 						cout << "1- Modify name \n2- Modify password\n";
 						cin >> choice;
 						if (choice == 1)
 						{
-							user->modifyName();
+							user->modifyName(); //O(1)
 						}
 						else if (choice == 2)
 						{
@@ -240,7 +267,7 @@ int main() {
 						else
 							cout << "Invalid operation" << endl;
 					}
-					else if (operation == 7)
+					else if (operation == 8)
 					{
 						string username, password;
 						cout << "Enter your username" << endl;
@@ -253,10 +280,10 @@ int main() {
 						if (confirm == 1) {
 							User::removeUser(users, username, password);
 							usersAccounts.erase(username);
+							break;
 						}
-							
 					}
-					else if (operation == 8)
+					else if (operation == 9)
 					{
 						break;
 					}
