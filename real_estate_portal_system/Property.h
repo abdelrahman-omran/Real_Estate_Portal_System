@@ -23,9 +23,22 @@ public:
 	static void RemoveProperty(int id, map<int, Property>& p);
 	void Display();
 	void search();
-	static void search(int, string, string, int, double, double, map<int, Property> p);
-	int getType();
-	~Property();
+	static void search(int, string, string, int, double, double, double, map<int, Property> p);
+//setters and getters
+	string getType();
+	string getName();
+	string getLocation();
+	string getOwner();
+	int getRooms();
+	double getArea();
+	double getPrice();
 
+	void setType(string Type);
+	void setName(string Name);
+	void setLocation(string Location);
+	void setOwner(string Owner);
+	void setRooms(int Rooms);
+	void setArea(double Area);
+	void setPrice(double Price);
 };
 

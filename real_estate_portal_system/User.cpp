@@ -18,7 +18,7 @@ User::User()
 	password = "";
 	name = "";
 }
-User::User(const string userEmail, const string userPassword, const string userName)
+User::User(string userEmail, string userPassword, string userName)
 {
 	try
 	{
@@ -88,47 +88,70 @@ void User::modifyName()
 			cout << "Invalid Name Format !\n";
 			cout << "Please Try Again : ";
 		}
-}
-
-
-
-
-
-bool User::isValidEmail(const string email)
-{
-	size_t at = email.find('@');
-	size_t dot = email.find('.');
-	return (at >= 9 && (dot - at) > 2);
-}
-bool User::isValidName(const string name)
-{
-	return (name.size() >= 6);
-}
-bool User::isValidPassword(const string& password)
-{
-	bool hasChars = false;
-	bool hasNumbers = false;
-	bool valid = true;
-	for (char ch : password)
+} 
+void User::compare(vector<int>ids, map<int, Property>& p) {
+	vector<Property>propCompare;
+	for (int i = 0; i < ids.size(); i++) //only up to 4 so O(1)
 	{
-		if (isalpha(ch))
+		if (p.find(ids[i]) != p.end())
 		{
-			hasChars = true;
-		}
-		else if (isdigit(ch))
-		{
-			hasNumbers = true;
+			propCompare.push_back(p[ids[i]]);
 		}
 		else
 		{
-			valid = false;
-		}
-		if (hasChars && hasNumbers && valid && password.size() >= 10)
-		{
-			return true;
+			cout << "Property with id " << ids[i] << " does not exist";
 		}
 	}
-	return false;
+	cout << "---------------------------------" << endl;
+	cout << "Type     | ";
+	for (int i = 0; i < propCompare.size(); i++)
+	{
+		cout << propCompare[i].getType() << "		| ";
+	}
+	cout << endl;
+
+	cout << "Name     | ";
+	for (int i = 0; i < propCompare.size(); i++)
+	{
+		cout << propCompare[i].getName() << "		| ";
+	}
+	cout << endl;
+
+	cout << "Location | ";
+	for (int i = 0; i < propCompare.size(); i++)
+	{
+		cout << propCompare[i].getLocation() << "		| ";
+	}
+	cout << endl;
+
+	cout << "Owner    | ";
+	for (int i = 0; i < propCompare.size(); i++)
+	{
+		cout << propCompare[i].getOwner() << "		| ";
+	}
+	cout << endl;
+
+	cout << "Bedrooms | ";
+	for (int i = 0; i < propCompare.size(); i++)
+	{
+		cout << propCompare[i].getRooms() << "		| ";
+	}
+	cout << endl;
+
+	cout << "Area     | "  ;
+	for (int i = 0; i < propCompare.size(); i++)
+	{
+		cout << propCompare[i].getArea() << "		| ";
+	}
+	cout << endl;
+
+	cout << "Price    | "  ;
+	for (int i = 0; i < propCompare.size(); i++)
+	{
+		cout << propCompare[i].getPrice() << "		| ";
+	}
+	cout << endl;
+	cout << "---------------------------------" << endl;
 }
 void User::submit(Property& prop, queue<Property>& propertyQueue) {
 	propertyQueue.push(prop);
@@ -158,6 +181,46 @@ void User::display() {
 	cout << "---------------------------------" << endl;
 }
 
+#pragma region Checking valid inputs
+bool User::isValidEmail(string email)
+{
+	size_t at = email.find('@');
+	size_t dot = email.find('.');
+	return (at >= 9 && (dot - at) > 2);
+}
+bool User::isValidName(string name)
+{
+	return (name.size() >= 6);
+}
+bool User::isValidPassword(string password)
+{
+	bool hasChars = false;
+	bool hasNumbers = false;
+	bool valid = true;
+	for (char ch : password)
+	{
+		if (isalpha(ch))
+		{
+			hasChars = true;
+		}
+		else if (isdigit(ch))
+		{
+			hasNumbers = true;
+		}
+		else
+		{
+			valid = false;
+		}
+		if (hasChars && hasNumbers && valid && password.size() >= 10)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+#pragma endregion
+
+#pragma region Setter and getter
 void User::setEmail(string newEmail)
 {
 	email = newEmail;
@@ -173,11 +236,13 @@ void User::setName(string newName)
 	name = newName;
 }
 
-
-
 string User::getPassword() {
 	return password;
 }
 string User::getUsername() {
+	return name;
+}
+string User::getEmail() {
 	return email;
 }
+#pragma endregion

@@ -6,18 +6,12 @@
 #include<queue>
 #include <optional>
 #include "Property.h"
-#define ll long long
-#define st size_t
-#define L << '\n'
-#define pb push_back
-#define eb emplace_back
-
 using namespace std;
 class User
 {
 public:
 	User();
-	User(const string userEmail, const string userPassword, const string userName);
+	User(string userEmail, string userPassword, string userName);
 	map<size_t, User>user;
 	queue<Property> propertyQueue;
 	void submit(Property& prop, queue<Property>& propertyQueue);
@@ -27,17 +21,19 @@ public:
 	static void removeUser(vector<User>& users, string username, string password);
 	void getMyProperties();
 	void display();
+	void compare(vector<int>ids, map<int,Property>& p);
 	void setEmail(string newEmail);
 	void setPassword(string newPassword);
 	void setName(string newName);
 	string getPassword();
 	string getUsername();
+	string getEmail();
 
 private:
 	string email, password, name;
 	size_t id = 1000000;
 	vector<Property>userProperties;
-	bool isValidEmail(const string email);
-	bool isValidName(const string name);
-	bool isValidPassword(const string& password);
+	bool isValidEmail(string email);
+	bool isValidName(string name);
+	bool isValidPassword(string password);
 };
