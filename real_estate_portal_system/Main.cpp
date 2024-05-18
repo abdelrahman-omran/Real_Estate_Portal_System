@@ -3,27 +3,77 @@
 #include<map>
 #include<vector>
 #include<queue>
+#include <fstream>
+#include <sstream>
 #include "Admin.h"
 #include "User.h"
 #include "Property.h"
 using namespace std;
+map<string, string> adm;
+map<string, pair<string, User>>usersAccounts;
+map<int, Property>p;
+
+queue<Property> propertyQueue; //FIFO,
+//any other data structure, won't work.
+
+static vector<User>users;
+vector<Property>properties;
+vector<int>propCompareID;
+
+void writeFile() {
+	ofstream File("File_Data.txt", ios::out | ios::app);
+	if (File.is_open()) {
+		for (int i = 0; i < users.size(); i++) {
+			File << users[i].getEmail() << "," << users[i].getPassword() << "," << users[i].getUsername() << endl;
+		}
+		File.close();
+	}
+	else {
+		cout << "Unable to open file to write data!" << endl;
+	}
+}
+
+static vector<string> splitString(const string& s, char del) {
+	stringstream ss(s);
+	string word;
+	vector<string> str;
+	while (getline(ss, word, del)) {
+		str.push_back(word);
+	}
+	return str;
+}
+
+void readFile() {
+
+	ifstream File("File_Data.txt");
+	if (File.is_open()) {
+		string email, password, name;
+		string line;
+		vector<string>lines;
+		while (getline(File, line)) {
+			lines = splitString(line, ',');
+			email = lines[0];
+			password = lines[1];
+			name = lines[2];
+			User user(email, password, name);
+			users.push_back(user);
+		}
+		File.close();
+		return;
+	}
+	else {
+		cout << "Unable to open file to read data!" << endl;
+	}
+
+}
 
 int main() {
+	readFile();
 	int n;
 	int id = 0;
 	int inputPerson,operation;
 	string userEmail, userName, userPassword;
-
-	map<string, Admin*> adm;
-	map<string, pair<string,User>>usersAccounts;
-	map<int, Property>p;
-
-	queue<Property> propertyQueue; //FIFO,
-	//any other data structure, won't work.
-
-	vector<User>users;
-	vector<Property>properties;
-	vector<int>propCompareID;
+	adm["admin"] = "admin";
 	while (true) {
 
 		cout << "***** welcome *****" << endl;
@@ -45,7 +95,12 @@ int main() {
 				}
 				else {
 					cout << "access approved" << endl;
-					Admin::registerUser(adm); //O(1)
+					cout << "Enter admin username" << endl;
+					cin >> username;
+					cout << "Enter admin password" << endl;
+					cin >> password;
+					Admin::Admin(username, password); //O(1)
+					adm[username] = password;
 					cout << "do you want to continue" << endl;
 					string y;
 					cin >> y;
@@ -65,9 +120,9 @@ int main() {
 					cin >> operation;
 					if (operation == 1)
 					{
-						for (auto it : usersAccounts) // O(N)
+						for (auto it : users) // O(N)
 						{
-							it.second.second.display();
+							it.display();
 						}
 					}
 					else if (operation == 2)
@@ -303,6 +358,7 @@ int main() {
 		}
 		if(inputPerson == 3)
 		{
+			writeFile();
 			cout << "Thanks for using our application"<<endl;
 			break;
 		}

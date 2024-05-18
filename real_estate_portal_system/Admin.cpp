@@ -10,23 +10,14 @@ Admin::Admin(string Username, string Password) {
 	username = Username;
 	password = Password;
 }
-void Admin::registerUser(map<string, Admin*>& adm) {
+bool Admin::login(map<string, string> adm) {
 	string u;
 	string p;
 	cout << "enter your username:" << " " << endl;
 	cin >> u;
 	cout << "enter your password:" << " " << endl;
 	cin >> p;
-	adm[u] = new Admin(u, p);
-}
-bool Admin::login(map<string, Admin*>& adm) {
-	string u;
-	string p;
-	cout << "enter your username:" << " " << endl;
-	cin >> u;
-	cout << "enter your password:" << " " << endl;
-	cin >> p;
-	if (adm[u]->password == p) {
+	if (adm[u] == p) {
 		cout << "Access granted" << endl;
 		return true;
 	}
