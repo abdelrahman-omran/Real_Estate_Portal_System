@@ -1,2 +1,20 @@
-abdoomran123@gmail.com,abdoomran123@gmail.com,abdoomran123@gmail.com
-abdoomran123@gmail.com,abdoomran123@gmail.com,abdoomran123@gmail.com
+ADMIN INFO
+adm,adm
+admin,admin
+USER INFO
+AbdallahElSayed123@gmail.com,AbdallahElSayed123,Abdallah ElSayed
+Abdoomran123@gmail.com,Abdoomran123,Abdo Omran
+AhmedMedhat123@gmail.com,AhmedMedhat123,Ahmed Medhat
+SarahMohamed123@gmail.com,SarahMohamed123,Sarah Mohamed
+SeifYasser123@gmail.com,SeifYasser123,Seif Yasser
+UsifELAdly123@gmail.com,UsifELAdly123,Usif ELAdly
+PROPERTY INFO
+0,Apartment,Nile View Apartments,Cairo,UsifELAdly123@gmail.com,3,120,150000
+1,House,Sunny Villa,Giza,SeifYasser123@gmail.com,4,250,300000
+2,Condo,Pyramids Condo,Alexandria,SarahMohamed123@gmail.com,2,100,200000
+3,Studio,Corniche Studio,Luxor,AbdallahElSayed123@gmail.com,1,500,100000
+4,Townhouse,Nile Townhouse,Aswan,AhmedMedhat123@gmail.com,3,180,250000
+5,Villa,Red Sea Villa,Sharm El-Sheikh,Abdoomran123@gmail.com,5,300,500000
+6,Duplex,Mediterranean Duplex,Marsa Matruh,UsifELAdly123@gmail.com,4,200,350000
+NEW PROPERTY LISTINGS
+Villa,Mediterranean Villa,Marsa Matruh,Abdoomran123@gmail.com,5,250,450000

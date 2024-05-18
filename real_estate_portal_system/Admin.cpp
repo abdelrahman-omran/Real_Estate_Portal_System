@@ -40,8 +40,13 @@ void Admin::Blacklist(map<string, User>& approvedusers, map<string, User>& Blist
 		cout << "User " << u << " not found!" << endl;
 	}
 }
- void Admin::approve(queue<Property>& propertyQueue, map<int,Property>& p, vector<Property>& properties)
+ void Admin::approve(queue<Property>& propertyQueue, map<string, pair<string, User>> &usersAccounts
+ , map<int,Property>& p, vector<Property>& properties, int size)
 {
+	 if (propertyID == 0)
+	 {
+		 propertyID = size;
+	 }
 	if (propertyQueue.empty()) {
 		cout << "No properties left to approve." << endl;
 		return;
@@ -55,8 +60,9 @@ void Admin::Blacklist(map<string, User>& approvedusers, map<string, User>& Blist
 			int approve;
 			cin >> approve;
 			if (approve == 1) {
-				properties.push_back(propertyQueue.front());
+				//properties.push_back(propertyQueue.front());
 				p[Admin::propertyID] = propertyQueue.front();
+				usersAccounts[propertyQueue.front().getOwner()].second.AddProperty(propertyQueue.front());
 				Admin::propertyID++;
 				cout << "property added successfully!" << endl;
 				propertyQueue.pop();

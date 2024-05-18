@@ -50,7 +50,7 @@ User* User::login(map<string, pair<string, User>>& usersAccounts, bool &access)
 			}
 			else
 			{
-				cout << "Invalid Password !\n" << endl;
+				cout << "Wrong Password !\n" << endl;
 			}
 		}
 		else
@@ -155,6 +155,9 @@ void User::compare(vector<int>ids, map<int, Property>& p) {
 }
 void User::submit(Property& prop, queue<Property>& propertyQueue) {
 	propertyQueue.push(prop);
+}
+void User::AddProperty(Property& prop) //only used while writing from file
+{ 
 	userProperties.push_back(prop);
 }
 
@@ -176,8 +179,10 @@ void User::removeUser(vector<User>& users, string username, string password) {
 }
 void User::display() {
 	cout << "---------------------------------" << endl;
-	cout << "Email: " << email << endl;;
+	cout << "Email: " << email << endl;
 	cout << "Username: " << name << endl;
+	cout << "Number of properties: " << userProperties.size()<<endl;
+	cout << "Password: " << password <<endl;
 	cout << "---------------------------------" << endl;
 }
 
